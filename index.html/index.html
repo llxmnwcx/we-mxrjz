@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>银龄慧眼 · 代际数字共融</title>
+    <!-- 字体与图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== 全局重置 & 基础 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #0a1e32;
+            --primary-mid: #154a6e;
+            --primary-blue: #1f6390;
+            --primary-light: #4a90d9;
+            --primary-pale: #e8f2fb;
+            --primary-ghost: #f5faff;
+            --gold: #d4af37;
+            --gold-light: #f5e7b2;
+            --gold-glow: rgba(212, 175, 55, 0.15);
+            --white: #ffffff;
+            --gray-soft: #f0f5fa;
+            --gray-text: #1e2f3f;
+            --shadow-sm: 0 4px 20px rgba(10, 30, 50, 0.08);
+            --shadow-md: 0 12px 40px rgba(10, 30, 50, 0.12);
+            --shadow-gold: 0 8px 32px rgba(212, 175, 55, 0.2);
+            --radius: 24px;
+            --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--white);
+            color: var(--gray-text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== 装饰元素 ===== */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(74, 144, 217, 0.05) 0%, transparent 40%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231f6390' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .gold-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 16px auto 24px;
+            width: 100%;
+            max-width: 300px;
+        }
+        .gold-divider::before,
+        .gold-divider::after {
+            content: '';
+            flex: 1;
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        .gold-divider i {
+            color: var(--gold);
+            font-size: 1.4rem;
+            text-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        /* ===== 导航栏 ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            transition: var(--transition);
+        }
+
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 76px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+
+        .nav-brand i {
+            font-size: 1.8rem;
+            color: var(--gold);
+            filter: drop-shadow(0 0 8px var(--gold-glow));
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary-dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            position: relative;
+            letter-spacing: 0.3px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--primary-light));
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-mid);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--gold), #b8941e);
+            color: var(--white) !important;
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            box-shadow: var(--shadow-gold);
+            transition: var(--transition);
+        }
+        .nav-cta::after {
+            display: none !important;
+        }
+        .nav-cta:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 32px rgba(212, 175, 55, 0.35);
+            background: linear-gradient(135deg, #c4a035, #a07d1a);
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .nav-toggle span {
+            display: block;
+            width: 28px;
+            height: 2.5px;
+            background: var(--primary-dark);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            padding: 160px 0 100px;
+            background: linear-gradient(165deg, var(--primary-ghost) 0%, var(--white) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 4.2rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #0a1e32 0%, #1f6390 40%, #d4af37 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            text-shadow: 0 4px 40px rgba(212, 175, 55, 0.1);
+        }
+
+        .hero-content h1 .highlight {
+            background: linear-gradient(135deg, #d4af37, #f5e7b2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-style: italic;
+        }
+
+        .hero-content .subhead {
+            font-size: 1.15rem;
+            color: #4a5b6e;
+            max-width: 480px;
+            margin-bottom: 32px;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold-light), var(--white));
+            color: var(--primary-mid);
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 6px 20px;
+            border-radius: 60px;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(4px);
+        }
+
+        .hero-badge i {
+            color: var(--gold);
+            margin-right: 6px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--primary-mid), var(--primary-blue));
+            color: var(--white);
+            padding: 16px 40px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 8px 28px rgba(26, 67, 113, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 14px 36px rgba(26, 67, 113, 0.35);
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: transparent;
+            color: var(--primary-dark);
+            padding: 16px 40px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid var(--gold);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .btn-outline:hover {
+            background: var(--gold);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 48px;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 2px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .hero-stats .stat {
+            display: flex;
+            flex-direction: column;
+        }
+        .hero-stats .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            line-height: 1;
+        }
+        .hero-stats .stat-number i {
+            color: var(--gold);
+            font-size: 1.4rem;
+            margin-right: 4px;
+        }
+        .hero-stats .stat-label {
+            font-size: 0.9rem;
+            color: #6b7d8f;
+            font-weight: 500;
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-image .mockup-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md), 0 0 0 1px rgba(212, 175, 55, 0.1);
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 440px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: var(--transition);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-image .mockup-card::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 32px;
+            background: linear-gradient(135deg, var(--gold), transparent, var(--primary-light));
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(12px);
+        }
+
+        .hero-image .mockup-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md), 0 0 0 1px rgba(212, 175, 55, 0.2);
+        }
+
+        .mockup-card .mockup-icon {
+            font-size: 2.6rem;
+            color: var(--gold);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .mockup-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+        }
+        .mockup-card p {
+            color: #5a6f82;
+            font-size: 0.95rem;
+        }
+        .mockup-card .mockup-tag {
+            display: inline-block;
+            margin-top: 16px;
+            background: var(--gold-light);
+            color: var(--primary-mid);
+            font-size: 0.8rem;
+            padding: 6px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .mockup-features {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .mockup-features .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: #3d5266;
+        }
+        .mockup-features .feature-item i {
+            color: var(--gold);
+            width: 22px;
+            font-size: 1rem;
+            text-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        /* ===== 通用标题 ===== */
+        .section-title {
+            text-align: center;
+            margin-bottom: 56px;
+            position: relative;
+        }
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            letter-spacing: -0.01em;
+        }
+        .section-title h2 span {
+            background: linear-gradient(135deg, var(--gold), #b8941e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section-title .subtitle {
+            color: #5a6f82;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 12px auto 0;
+            font-weight: 400;
+        }
+
+        /* ===== 背景卡片 ===== */
+        .section-bg {
+            background: var(--primary-ghost);
+        }
+
+        /* ===== 痛点 / 背景 ===== */
+        .background-section {
+            padding: 100px 0 80px;
+        }
+
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .pain-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pain-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--primary-light));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .pain-card:hover::after {
+            opacity: 1;
+        }
+
+        .pain-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .pain-card .icon-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, var(--gold-light), var(--white));
+            color: var(--gold);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .pain-card h4 {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .pain-card p {
+            font-size: 0.95rem;
+            color: #4a5b6e;
+            line-height: 1.7;
+        }
+
+        /* ===== 产品 ===== */
+        .product-section {
+            padding: 80px 0 100px;
+        }
+
+        .product-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .product-showcase.reverse {
+            direction: rtl;
+        }
+        .product-showcase.reverse>* {
+            direction: ltr;
+        }
+
+        .product-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+        }
+        .product-text p {
+            color: #4a5b6e;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .product-text ul {
+            list-style: none;
+            padding: 0;
+        }
+        .product-text ul li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        .product-text ul li i {
+            color: var(--gold);
+            margin-top: 4px;
+            width: 24px;
+            font-size: 1.1rem;
+            text-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        .product-image {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            transition: var(--transition);
+        }
+        .product-image:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+        .product-image .img-placeholder {
+            background: linear-gradient(145deg, var(--primary-ghost), var(--white));
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--primary-mid);
+            font-weight: 500;
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+        }
+        .product-image .img-placeholder i {
+            font-size: 3.6rem;
+            display: block;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--gold), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ===== 课程模块 ===== */
+        .modules-section {
+            padding: 100px 0;
+            background: linear-gradient(180deg, var(--primary-ghost) 0%, var(--white) 100%);
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .module-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            box-shadow: var(--shadow-sm);
+            border-top: 6px solid var(--gold);
+            transition: var(--transition);
+            position: relative;
+        }
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .module-card .mod-icon {
+            font-size: 2.4rem;
+            color: var(--gold);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .module-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+        }
+        .module-card .mod-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gold);
+            background: var(--gold-light);
+            padding: 4px 16px;
+            border-radius: 60px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        .module-card p {
+            color: #4a5b6e;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        .module-card ul {
+            margin-top: 14px;
+            padding-left: 20px;
+            color: #4a5b6e;
+            font-size: 0.92rem;
+        }
+        .module-card ul li {
+            margin-bottom: 6px;
+            list-style-type: '✦ ';
+        }
+        .module-card ul li::marker {
+            color: var(--gold);
+        }
+
+        .module-card.alt-border {
+            border-top-color: var(--primary-light);
+        }
+        .module-card.alt-border .mod-icon {
+            color: var(--primary-light);
+        }
+        .module-card.alt-border .mod-tag {
+            color: var(--primary-light);
+            background: var(--primary-pale);
+        }
+
+        /* ===== 特色 ===== */
+        .features-section {
+            padding: 100px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-item-card {
+            text-align: center;
+            padding: 40px 24px;
+            border-radius: var(--radius);
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            transition: var(--transition);
+            position: relative;
+        }
+        .feature-item-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+        }
+        .feature-item-card .fi-icon {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, var(--gold), #b8941e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .feature-item-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+        .feature-item-card p {
+            font-size: 0.95rem;
+            color: #4a5b6e;
+            line-height: 1.6;
+        }
+
+        /* ===== 团队 ===== */
+        .team-section {
+            padding: 100px 0;
+            background: linear-gradient(165deg, var(--primary-ghost) 0%, var(--white) 100%);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .team-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 32px 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(212, 175, 55, 0.06);
+            transition: var(--transition);
+        }
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+        }
+        .team-card .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold-light), var(--white));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+            font-size: 2rem;
+            color: var(--gold);
+            font-weight: 600;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+        }
+        .team-card h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+        }
+        .team-card .role {
+            font-size: 0.85rem;
+            color: var(--gold);
+            font-weight: 500;
+        }
+        .team-card .bio {
+            font-size: 0.88rem;
+            color: #4a5b6e;
+            margin-top: 6px;
+        }
+
+        .team-card.advisor .avatar {
+            background: linear-gradient(135deg, #e8f0fe, var(--white));
+            color: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+        .team-card.advisor .role {
+            color: var(--primary-light);
+        }
+
+        /* ===== 实施路径 ===== */
+        .roadmap-section {
+            padding: 100px 0;
+        }
+
+        .roadmap-timeline {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            position: relative;
+        }
+
+        .roadmap-step {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            transition: var(--transition);
+            position: relative;
+        }
+        .roadmap-step:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .roadmap-step .step-number {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--gold), #b8941e);
+            padding: 4px 18px;
+            border-radius: 60px;
+            margin-bottom: 14px;
+            letter-spacing: 0.5px;
+        }
+        .roadmap-step h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+        .roadmap-step p {
+            font-size: 0.95rem;
+            color: #4a5b6e;
+            line-height: 1.7;
+        }
+
+        /* ===== 运营模式 ===== */
+        .ops-section {
+            padding: 100px 0;
+            background: var(--primary-ghost);
+        }
+
+        .ops-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .ops-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 40px 24px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(212, 175, 55, 0.06);
+            transition: var(--transition);
+        }
+        .ops-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+        }
+        .ops-card .ops-icon {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--gold), #b8941e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .ops-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+        }
+        .ops-card p {
+            font-size: 0.95rem;
+            color: #4a5b6e;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        /* ===== 社会价值 & 预算 ===== */
+        .value-section {
+            padding: 100px 0;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .value-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            box-shadow: var(--shadow-sm);
+            border-left: 6px solid var(--gold);
+            transition: var(--transition);
+        }
+        .value-card:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-md);
+        }
+        .value-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+        .value-card h4 i {
+            color: var(--gold);
+            margin-right: 8px;
+        }
+        .value-card p {
+            font-size: 0.95rem;
+            color: #4a5b6e;
+            line-height: 1.6;
+        }
+
+        .budget-box {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 40px 32px;
+            box-shadow: var(--shadow-sm);
+            max-width: 600px;
+            margin: 40px auto 0;
+            text-align: center;
+            border: 2px solid var(--gold);
+            position: relative;
+        }
+        .budget-box::before {
+            content: '✦';
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            padding: 0 12px;
+            font-size: 1.4rem;
+            color: var(--gold);
+        }
+        .budget-box .amount {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        .budget-box .amount span {
+            background: linear-gradient(135deg, var(--gold), #b8941e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .budget-box p {
+            color: #4a5b6e;
+            margin-top: 4px;
+        }
+
+        /* ===== 页脚 ===== */
+        .footer {
+            background: var(--primary-dark);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 56px 0 40px;
+            border-top: 4px solid var(--gold);
+        }
+        .footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer .brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer .brand i {
+            color: var(--gold);
+            font-size: 1.4rem;
+        }
+        .footer .copy {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        .footer .social {
+            display: flex;
+            gap: 20px;
+        }
+        .footer .social a {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        .footer .social a:hover {
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 992px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-actions {
+                justify-content: center;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .hero-image .mockup-card {
+                max-width: 100%;
+            }
+            .product-showcase {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .product-showcase.reverse {
+                direction: ltr;
+            }
+            .product-text ul li {
+                justify-content: center;
+            }
+            .pain-grid,
+            .module-grid,
+            .feature-grid,
+            .team-grid,
+            .roadmap-timeline,
+            .ops-grid,
+            .value-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero-content h1 {
+                font-size: 3.4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 76px;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(14px);
+                flex-direction: column;
+                padding: 24px 0;
+                gap: 16px;
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+                transform: translateY(-120%);
+                transition: var(--transition);
+                border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            }
+            .nav-links.open {
+                transform: translateY(0);
+            }
+            .nav-toggle {
+                display: flex;
+            }
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+            .pain-grid,
+            .module-grid,
+            .feature-grid,
+            .team-grid,
+            .roadmap-timeline,
+            .ops-grid,
+            .value-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-title h2 {
+                font-size: 2.4rem;
+            }
+            .hero-stats {
+                gap: 24px;
+                flex-wrap: wrap;
+            }
+            .footer .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .budget-box .amount {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            .btn-primary,
+            .btn-outline {
+                width: 100%;
+                justify-content: center;
+            }
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .mockup-card {
+                padding: 24px 16px;
+            }
+            .container {
+                padding: 0 16px;
+            }
+        }
+
+        /* ===== 微交互 ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 导航 ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="nav-brand">
+                <i class="fas fa-eye"></i>
+                银龄慧眼
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#background">背景</a></li>
+                <li><a href="#product">产品</a></li>
+                <li><a href="#modules">课程</a></li>
+                <li><a href="#team">团队</a></li>
+                <li><a href="#roadmap">路径</a></li>
+                <li><a href="#value">价值</a></li>
+                <li><a href="#contact" class="nav-cta">联系我们</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="菜单">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+        <div class="bg-pattern"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-sparkles"></i> 代际数字共融计划
+                </div>
+                <h1>
+                    银龄慧眼<br />
+                    <span class="highlight">守护数字时代的温暖</span>
+                </h1>
+                <p class="subhead">
+                    面向65岁以上城市独居/半独居老年人，通过沉浸式课堂与代际陪伴，
+                    帮助长者识破AI骗局，重获数字生活的自信与尊严。
+                </p>
+                <div class="hero-actions">
+                    <a href="#product" class="btn-primary">
+                        <i class="fas fa-gem"></i> 了解工坊
+                    </a>
+                    <a href="#contact" class="btn-outline">
+                        <i class="fas fa-hand-holding-heart"></i> 加入我们
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number"><i class="fas fa-people-group"></i> 3亿+</span>
+                        <span class="stat-label">60岁+ 人口</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number"><i class="fas fa-triangle-exclamation"></i> 300%</span>
+                        <span class="stat-label">AI诈骗年增长率</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number"><i class="fas fa-community"></i> 5-8</span>
+                        <span class="stat-label">首年覆盖社区</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="mockup-card">
+                    <span class="mockup-icon"><i class="fas fa-users"></i></span>
+                    <h3>“慧眼工坊”沉浸式课堂</h3>
+                    <p>围坐式工坊 · 平等陪伴 · 赋权防骗</p>
+                    <div class="gold-divider">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="mockup-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i> 识破“AI幻术” · 认知层
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i> 谣言粉碎机 · 实操层
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i> 倾听茶馆 · 情感层
+                        </div>
+                    </div>
+                    <span class="mockup-tag"><i class="far fa-clock"></i> 首年服务 300+ 人次</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 背景 / 痛点 ===== -->
+    <section class="background-section" id="background">
+        <div class="container">
+            <div class="section-title fade-in">
+                <div class="gold-divider">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h2>银发浪潮下的 <span>数字鸿沟</span></h2>
+                <p class="subtitle">深度老龄化与技术滥用的双重夹击，老年人成为数字社会中最易受伤害的群体</p>
+            </div>
+            <div class="pain-grid">
+                <div class="pain-card fade-in">
+                    <div class="icon-circle"><i class="fas fa-microchip"></i></div>
+                    <h4>技术层 · 识别困难</h4>
+                    <p>AI诈骗手段迭代快，老年人缺乏相关知识储备，难以辨别“AI换脸”“拟声诈骗”等真伪信息。</p>
+                </div>
+                <div class="pain-card fade-in">
+                    <div class="icon-circle"><i class="fas fa-heart-broken"></i></div>
+                    <h4>心理层 · 情感脆弱</h4>
+                    <p>情感孤独导致判断力下降，容易被骗子的“情绪价值”攻破防线，陷入“干妈”“专家”陷阱。</p>
+                </div>
+                <div class="pain-card fade-in">
+                    <div class="icon-circle"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h4>教育层 · 形式单一</h4>
+                    <p>传统反诈手段（传单、海报）失效，现有教育内容生硬枯燥，缺乏针对性的心理疏导。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 产品 ===== -->
+    <section class="product-section" id="product">
+        <div class="container">
+            <div class="section-title fade-in">
+                <div class="gold-divider">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <h2>核心产品 · <span>慧眼工坊</span></h2>
+                <p class="subtitle">打破传统讲台界限，让学习回归面对面的温度</p>
+            </div>
+            <div class="product-showcase fade-in">
+                <div class="product-text">
+                    <h3>沉浸式体验课堂</h3>
+                    <p>
+                        采用线下为主、线上为辅的混合模式，营造平等、温暖的同辈交流氛围。
+                        不仅是传授防骗技巧，更在陪伴中重建数字时代的自信心。
+                    </p>
+                    <ul>
+                        <li><i class="fas fa-circle-check"></i> 围坐式工坊体系，打破讲台界限</li>
+                        <li><i class="fas fa-circle-check"></i> 平等陪伴式成长，赋权与防骗并重</li>
+                        <li><i class="fas fa-circle-check"></i> 新媒体专业志愿者现场演示AI技术</li>
+                    </ul>
+                </div>
+                <div class="product-image">
+                    <div class="img-placeholder">
+                        <i class="fas fa-chalkboard-user"></i>
+                        <div>“慧眼工坊”现场</div>
+                        <div style="font-size:0.8rem;font-weight:400;margin-top:6px;color:#6b7d8f;">围坐式 · 互动式 · 沉浸式</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-showcase reverse fade-in" style="margin-top:60px;">
+                <div class="product-text">
+                    <h3>衍生产品 · “代际连线”手册</h3>
+                    <p>
+                        大字版图文指南《给爷爷奶奶的AI生存指南》，速查AI诈骗话术与官方核实平台，
+                        同时提供“子女应对攻略”，化解代际沟通矛盾。
+                    </p>
+                    <ul>
+                        <li><i class="fas fa-circle-check"></i> 防骗与沟通双核心设计</li>
+                        <li><i class="fas fa-circle-check"></i> 数字安全口袋书，随时查阅</li>
+                        <li><i class="fas fa-circle-check"></i> 工坊课程的实用延伸</li>
+                    </ul>
+                </div>
+                <div class="product-image">
+                    <div class="img-placeholder" style="background:#faf6ed;">
+                        <i class="fas fa-book-open" style="background:linear-gradient(135deg, var(--gold), #b8941e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;"></i>
+                        <div>《给爷爷奶奶的AI生存指南》</div>
+                        <div style="font-size:0.8rem;font-weight:400;margin-top:6px;color:#6b7d8f;">大字版 · 图文并茂</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 课程模块 ===== -->
+    <section class="modules-section" id="modules">
+        <div class="container">
+            <div class="section-title fade-in">
+                <div class="gold-divider">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <h2>三大课程 <span>模块</span></h2>
+                <p class="subtitle">认知 · 实操 · 情感，全方位构筑数字安全防线</p>
+            </div>
+            <div class="module-grid">
+                <div class="module-card fade-in">
+                    <span class="mod-icon"><i class="fas fa-robot"></i></span>
+                    <span class="mod-tag">认知层</span>
+                    <h4>识破“AI幻术”</h4>
+                    <p>沉浸式现场演示“照片开口说话”“声音克隆”，让老年人直观感受AI技术的欺骗性。</p>
+                    <ul>
+                        <li>观察“眼神”：眨眼频率异常</li>
+                        <li>观察“光影”：光源矛盾</li>
+                        <li>观察“细节”：逻辑违和</li>
+                    </ul>
+                </div>
+                <div class="module-card alt-border fade-in">
+                    <span class="mod-icon"><i class="fas fa-flask"></i></span>
+                    <span class="mod-tag">实操层</span>
+                    <h4>谣言粉碎机</h4>
+                    <p>收集家族群养生谣言与健康骗局，现场使用权威数据库联网查证，见证真伪分辨。</p>
+                    <ul>
+                        <li>关键词搜索 + 官方媒体核实</li>
+                        <li>变“被动接收”为“主动判断”</li>
+                        <li>授人以渔，独立甄别</li>
+                    </ul>
+                </div>
+                <div class="module-card alt-border fade-in" style="border-top-color: #7b6cf6;">
+                    <span class="mod-icon" style="color:#7b6cf6;"><i class="fas fa-leaf"></i></span>
+                    <span class="mod-tag" style="color:#7b6cf6;background:#f0edfe;">情感层</span>
+                    <h4>倾听茶馆</h4>
+                    <p>心理学专业老师引导，分享受骗经历，运用“叙事疗法”释放情绪，缓解羞耻与焦虑。</p>
+                    <ul>
+                        <li>安全包容的环境</li>
+                        <li>从情感根源增强心理防线</li>
+                        <li>减少再次受骗的可能</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 三大创新特色 ===== -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-title fade-in">
+                <div class="gold-divider">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h2>项目 <span>核心创新</span></h2>
+                <p class="subtitle">视角 · 技术 · 心理，三维突破</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-item-card fade-in">
+                    <span class="fi-icon"><i class="fas fa-handshake"></i></span>
+                    <h4>视角创新 · 平等对话</h4>
+                    <p>不把老人当作被保护的“弱者”，而是平等交流的“朋友”，尊重其主体性。</p>
+                </div>
+                <div class="feature-item-card fade-in">
+                    <span class="fi-icon"><i class="fas fa-arrow-down"></i></span>
+                    <h4>技术降维 · 简单易学</h4>
+                    <p>将AI技术原理转化为生活化观察技巧，大幅降低学习门槛，服务生活。</p>
+                </div>
+                <div class="feature-item-card fade-in">
+                    <span class="fi-icon"><i class="fas fa-brain"></i></span>
+                    <h4>心理干预前置 · 根源解决</h4>
+                    <p>将心理疏导嵌入全过程，从情感根源入手，而非仅停留在识别骗局表层。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 团队 ===== -->
+    <section class="team-section" id="team">
+        <div class="container">
+            <div class="section-title fade-in">
+                <div class="gold-divider">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h2>核心 <span>团队</span></h2>
+                <p class="subtitle">专业互补 · 充满活力 · 新文科背景</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-card fade-in">
+                    <div class="avatar"><i class="fas fa-user-graduate"></i></div>
+                    <h5>李澜欣</h5>
+                    <div class="role">教育学 · 项目统筹</div>
+                    <div class="bio">课程设计，把控整体进度</div>
+                </div>
+                <div class="team-card fade-in">
+                    <div class="avatar"><i class="fas fa-user-graduate"></i></div>
+                    <h5>韦彩霞</h5>
+                    <div class="role">教育学 · 活动执行</div>
+                    <div class="bio">社区联络，资源对接</div>
+                </div>
+                <div class="team-card fade-in">
+                    <div class="avatar"><i class="fas fa-user-graduate"></i></div>
+                    <h5>蒙娜</h5>
+                    <div class="role">教育学 · 调研分析</div>
+                    <div class="bio">数据收集与效果量化</div>
+                </div>
+                <div class="team-card fade-in">
+                    <div class="avatar"><i class="fas fa-user-graduate"></i></div>
+                    <h5>李锦坤</h5>
+                    <div class="role">网络与新媒体 · 视觉设计</div>
+                    <div class="bio">AI技术拆解，图文素材</div>
+                </div>
+                <div class="team-card advisor fade-in" style="grid-column: span 1; max-width: 280px; margin: 0 auto;">
+                    <div class="avatar"><i class="fas fa-user-tie"></i></div>
+                    <h5>李静</h5>
+                    <div class="role">心理学讲师 · 专业督导</div>
+                    <div class="bio">心理咨询经验，把控心理干预环节</div>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:32px;font-size:1rem;color:#4a5b6e;" class="fade-in">
+                <span style="background:var(--gold-light);padding:8px 24px;border-radius:60px;border:1px solid rgba(212,175,55,0.2);">
+                    <i class="fas fa-quote-left" style="color:var(--gold);margin-right:8px;"></i>
+                    可教性 + 可懂性 + 温度 —— 专业 · 科学 · 人文
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 实施路径 ===== -->
+    <section class="roadmap-section" id="roadmap">
+        <div class="container">
+            <div class="section-title fade-in">
+                <div class="gold-divider">
+                    <i class="fas fa-road"></i>
+                </div>
+                <h2>三步走 <span>实施路径</span></h2>
+                <p class="subtitle">从课程研发到数字化运营，稳步推进</p>
+            </div>
+            <div class="roadmap-timeline">
+                <div class="roadmap-step fade-in">
+                    <span class="step-number">第一阶段 · 1-3月</span>
+                    <h4>课程研发与试点</h4>
+                    <p>团队集中备课，打磨课程内容。开展1-2个社区免费试点工坊，收集反馈快速迭代。</p>
+                </div>
+                <div class="roadmap-step fade-in">
+                    <span class="step-number">第二阶段 · 3-6月</span>
+                    <h4>志愿者培训与复制</h4>
+                    <p>招募并培训大学生志愿者，建立标准化服务流程，推广至更多社区及老年大学。</p>
+                </div>
+                <div class="roadmap-step fade-in">
+                    <span class="step-number">第三阶段 · 6-12月</span>
+                    <h4>数字化资源上线</h4>
+                    <p>开发“银龄慧眼”小程序，整合谣言库与AI案例，实现数字化、规模化运营。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 运营模式 ===== -->
+    <section class="ops-section" id="ops">
+        <div class="container">
+            <div class="section-title fade-in">
+                <div class="gold-divider">
+                    <i class="fas fa-arrows-rotate"></i>
+                </div>
+                <h2>运营模式 · <span>服务闭环</span></h2>
+                <p class="subtitle">高校 — 社区 — 老年群体，持续迭代</p>
+            </div>
+            <div class="ops-grid">
+                <div class="ops-card fade-in">
+                    <span class="ops-icon"><i class="fas fa-university"></i></span>
+                    <h4>高校团队 · 内容生产</h4>
+                    <p>课程研发、志愿者培训、数字化产品开发，提供核心智力支持。</p>
+                </div>
+                <div class="ops-card fade-in">
+                    <span class="ops-icon"><i class="fas fa-building"></i></span>
+                    <h4>社区街道 · 场地提供</h4>
+                    <p>落地合作伙伴，提供活动场地和宣传支持，连接并触达老年群体。</p>
+                </div>
+                <div class="ops-card fade-in">
+                    <span class="ops-icon"><i class="fas fa-people-arrows"></i></span>
+                    <h4>老年群体 · 服务对象</h4>
+                    <p>接受服务，同时通过反馈优化课程，形成服务—反馈—优化的闭环。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 社会价值 & 预算 ===== -->
+    <section class="value-section" id="value">
+        <div class="container">
+            <div class="section-title fade-in">
+                <div class="gold-divider">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h2>社会 <span>价值</span></h2>
+                <p class="subtitle">不止于反诈，更是代际共融的桥梁</p>
+            </div>
+            <div class="value-grid">
+                <div class="value-card fade-in">
+                    <h4><i class="fas fa-heart"></i> 对老年人</h4>
+                    <p>打开“心窗子”，重寻归属感。不仅守住“钱袋子”，更在数字时代找到价值感。</p>
+                </div>
+                <div class="value-card fade-in">
+                    <h4><i class="fas fa-graduation-cap"></i> 对大学生</h4>
+                    <p>践行“新文科”，培养责任感。专业知识应用于实践，服务社会。</p>
+                </div>
+                <div class="value-card fade-in">
+                    <h4><i class="fas fa-globe-asia"></i> 对社会</h4>
+                    <p>弥合数字鸿沟，促进代际共融，构建包容、温暖的老年友好型社会。</p>
+                </div>
+            </div>
+
+            <div class="budget-box fade-in">
+                <div style="font-size:0.9rem;color:#5a6f82;font-weight:500;letter-spacing:1px;">首年经费预算</div>
+                <div class="amount"><span>¥</span>6,000</div>
+                <p style="display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:12px;">
+                    <span><i class="fas fa-check-circle" style="color:var(--gold);"></i> 课程研发</span>
+                    <span><i class="fas fa-check-circle" style="color:var(--gold);"></i> 物料制作</span>
+                    <span><i class="fas fa-check-circle" style="color:var(--gold);"></i> 社区运营</span>
+                </p>
+                <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(212,175,55,0.2);font-size:0.9rem;color:#5a6f82;">
+                    <i class="fas fa-rocket" style="color:var(--gold);"></i> 启动资金：大创项目 + 社区专项支持
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 风险 & 未来 ===== -->
+    <section style="padding:80px 0;background:var(--primary-ghost);" id="contact">
+        <div class="container">
+            <div class="section-title fade-in">
+                <div class="gold-divider">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <h2>未来 <span>展望</span></h2>
+                <p class="subtitle">打造老年人数字素养评估与提升的标杆</p>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:30px;">
+                <div style="background:var(--white);border-radius:var(--radius);padding:32px 24px;box-shadow:var(--shadow-sm);border:1px solid rgba(212,175,55,0.06);transition:var(--transition);" class="fade-in">
+                    <div style="font-size:2.6rem;color:var(--gold);margin-bottom:12px;"><i class="fas fa-chart-line"></i></div>
+                    <h4 style="font-family:'Playfair Display',serif;color:var(--primary-dark);">中期目标</h4>
+                    <p style="font-size:0.95rem;color:#4a5b6e;">开发“老年人数字素养评估系统”，提供专业量化标准。</p>
+                </div>
+                <div style="background:var(--white);border-radius:var(--radius);padding:32px 24px;box-shadow:var(--shadow-sm);border:1px solid rgba(212,175,55,0.06);transition:var(--transition);" class="fade-in">
+                    <div style="font-size:2.6rem;color:var(--gold);margin-bottom:12px;"><i class="fas fa-flag"></i></div>
+                    <h4 style="font-family:'Playfair Display',serif;color:var(--primary-dark);">长期愿景</h4>
+                    <p style="font-size:0.95rem;color:#4a5b6e;">联合多方力量，将“银龄慧眼”工坊打造成社区老年教育的标配服务。</p>
+                </div>
+                <div style="background:var(--white);border-radius:var(--radius);padding:32px 24px;box-shadow:var(--shadow-sm);border:1px solid rgba(212,175,55,0.06);transition:var(--transition);" class="fade-in">
+                    <div style="font-size:2.6rem;color:var(--gold);margin-bottom:12px;"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h4 style="font-family:'Playfair Display',serif;color:var(--primary-dark);">终极使命</h4>
+                    <p style="font-size:0.95rem;color:#4a5b6e;">助力构建包容、安全、有温度的老年友好型数字社会。</p>
+                </div>
+            </div>
+
+            <div style="margin-top:48px;background:var(--white);border-radius:var(--radius);padding:36px 32px;box-shadow:var(--shadow-sm);border:1px solid rgba(212,175,55,0.08);" class="fade-in">
+                <h4 style="font-family:'Playfair Display',serif;color:var(--primary-dark);text-align:center;margin-bottom:20px;"><i class="fas fa-shield-alt" style="color:var(--gold);"></i> 风险应对策略</h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;font-size:0.95rem;">
+                    <div><strong style="color:var(--primary-dark);">技术迭代风险</strong><br />建立动态更新机制，每月梳理最新案例。</div>
+                    <div><strong style="color:var(--primary-dark);">参与度风险</strong><br />“游戏化”设计 + “学习搭子”机制。</div>
+                    <div><strong style="color:var(--primary-dark);">团队管理风险</strong><br />“传帮带”机制，长期志愿服务基地。</div>
+                    <div><strong style="color:var(--primary-dark);">政策伦理风险</strong><br />严格匿名化，签订隐私保密协议。</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 页脚 ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="brand">
+                <i class="fas fa-eye"></i> 银龄慧眼 · 团队
+            </div>
+            <div class="copy">
+                &copy; 2026 银龄慧眼计划 &mdash; 代际数字共融
+            </div>
+            <div class="social">
+                <a href="#" aria-label="微信"><i class="fab fa-weixin"></i></a>
+                <a href="#" aria-label="微博"><i class="fab fa-weibo"></i></a>
+                <a href="#" aria-label="邮箱"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== JS ===== -->
+    <script>
+        // 导航折叠
+        const toggleBtn = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        toggleBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+            });
+        });
+
+        // 滚动渐入动画
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        fadeElements.forEach(el => observer.observe(el));
+
+        // 导航栏滚动阴影
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.06)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>
